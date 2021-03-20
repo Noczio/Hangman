@@ -2,8 +2,8 @@ import json
 import random
 
 
-def get_word(difficulty: str):
-    file = load_file(".\\words.json")
+def get_word(difficulty: str, file_path: str = ".\\words.json") -> str:
+    file = load_file(file_path)
     if difficulty in file.keys():
         possible_words = file[difficulty]
         word = random.choice(possible_words)
@@ -11,7 +11,7 @@ def get_word(difficulty: str):
     raise KeyError
 
 
-def load_file(file_path: str):
+def load_file(file_path: str) -> dict:
     # try to load file and set data, if error raise FileNotFoundError
     try:
         with open(file_path, 'r', encoding="utf-8") as f:

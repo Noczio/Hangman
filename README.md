@@ -1,17 +1,17 @@
 # Python Hangman
 
-## Requerimientos
+## Requirements
 
-Es necesario tener python instalado en el dispositivo. Cualquier versión de Python 3 funciona.
+Python 3.X.X must be installed in your computer.
 
-## Instrucciones
+## Instructions
 
-1. Ejecutar el comando python run.py en la consola de comandos con la ruta del proyecto abierta.
-2. Jugar y leer las instrucciones para la partida.
+1. Type down "python run.py" inside CMD on this project root directory.
+2. Play and follow any further instructions inside the game.
 
-## Nota
+## Notes
 
-- El juego está diseñado para usuarios que hablen español.
-- Esto es una tarea para clase de programación.
-- El juego es una aplicación de consola.
-- Hay tres dificultades, aunque solo unas cuantas palabras en el banco.
+- It's a console game.
+- There are three difficulties, each one with ten hidden words.
+- This was made as a homework. Don't expect future updates.
+- You're free to copy and download this code.

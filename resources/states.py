@@ -70,8 +70,8 @@ states = (  # final state: head, torso, both arms, and both legs
                 """
 )
 
-max_number_of_tries = len(states)-1
+max_number_of_tries = len(states)
 
 
-def print_hangman_state(tries: int):
+def print_hangman_state(tries: int) -> None:
     print(states[tries])

@@ -1,3 +1,8 @@
-{"easy": ["web", "tcp", "cloud", "capa", "dato", "ip", "red", "link"],
-"normal":  ["arquitectura", "servidor", "protocolo", "diseño", "arquitecto", "developer"],
-"hard":  ["fullstack", "backend", "devops", "frontend", "almacenamiento"]}
+{"easy": ["web", "tcp", "cloud", "layer", "data", "ip",
+          "net", "link", "mac", "port", "ftp", "http"],
+
+"normal": ["server", "protocol", "design", "architect", "developer",
+           "session", "programmer", "webapp", "component", "browser"],
+
+"hard":  ["architecture", "fullstack", "backend", "devops", "frontend",
+          "storage", "encoding", "framework", "security", "hardware"]}
