@@ -76,10 +76,10 @@ def run() -> None:
 
     # game logic
     print(f"Let's play Hangman!!")
-    while tries > 1:
+    while tries - 1 > 0:
         # if there are enough tries keep playing
         draw_ui(tries - 1, hidden_word)
-        # get user input
+        # get user input if tries are still greater than 0
         while True:
             chosen_char = choose_char()
             if chosen_char is not None:
@@ -105,6 +105,8 @@ def run() -> None:
     if player_win:
         adaptive_final_msg = "won"
     else:
+        # show one last time the hangman ui
+        draw_ui(0, hidden_word)
         adaptive_final_msg = "lost"
         print(f"\nThe word was {word}.")
 
