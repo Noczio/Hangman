@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Python 3.X.X must be installed in your computer.
+Python 3.7.X or greater must be installed in your computer.
 
 ## Instructions
 

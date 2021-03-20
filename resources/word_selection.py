@@ -2,7 +2,7 @@ import json
 import random
 
 
-def get_word(difficulty: str, file_path: str = ".\\words.json") -> str:
+def get_word(difficulty: str, file_path: str = ".\\resources\\words.json") -> str:
     file = load_file(file_path)
     if difficulty in file.keys():
         possible_words = file[difficulty]
@@ -11,7 +11,12 @@ def get_word(difficulty: str, file_path: str = ".\\words.json") -> str:
     raise KeyError
 
 
-def load_file(file_path: str) -> dict:
+def get_valid_input(file_path: str = ".\\resources\\valid_input.json") -> tuple:
+    data = load_file(file_path)
+    return tuple(data)
+
+
+def load_file(file_path: str) -> any:
     # try to load file and set data, if error raise FileNotFoundError
     try:
         with open(file_path, 'r', encoding="utf-8") as f:

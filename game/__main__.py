@@ -1,11 +1,10 @@
-import sys
 import os
+import sys
 
-from resources.states import print_hangman_state
+from game.global_var import SelectedLetters
 from resources.states import max_number_of_tries
-from resources.word_selection import get_word
-
-chosen_chars = []
+from resources.states import print_hangman_state
+from resources.word_selection import get_word, get_valid_input
 
 
 def clear_console() -> None:
@@ -13,27 +12,26 @@ def clear_console() -> None:
 
 
 def choose_char() -> str:
-    possibilities = ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
-                     "t", "u", "v", "w", "x", "y", "z")
-    user_input = input("Type down a letter: ")
-    if user_input in chosen_chars:
+    selected_letters = SelectedLetters.get_instance()
+    possibilities = get_valid_input()
+    user_input = input("Type down a letter: ").lower()
+    if user_input in selected_letters:
         print("Selected character has been previously used")
-    elif user_input not in chosen_chars and user_input in possibilities:
+    elif user_input not in selected_letters and user_input in possibilities:
         return user_input
     else:
         print("Input is not valid")
-    choose_char()
 
 
 def choose_difficulty() -> str:
+    clear_console()
     possibilities = {"1": "easy", "2": "normal", "3": "hard"}
-    user_input = input("Choose the game's difficulty:\n1. Easy\n2. Normal\n3. Hard\nAnswer: ")
-    if user_input.lower() in possibilities.keys():
+    user_input = input("Choose the game's difficulty:\n1. Easy\n2. Normal\n3. Hard\n\nAnswer: ").lower()
+    if user_input in possibilities.keys():
         return possibilities[user_input]
-    elif user_input.lower() in possibilities.values():
-        return user_input.lower()
+    elif user_input in possibilities.values():
+        return user_input
     print("\nInput must be: 1, 2, 3, easy, normal or hard\n")
-    choose_difficulty()
 
 
 def close_app() -> None:
@@ -45,35 +43,82 @@ def close_app() -> None:
 def draw_ui(tries: int, hidden_word: list) -> None:
     clear_console()
     print_hangman_state(tries)
-    for i in hidden_word:
-        print(i, end=" ")
-    print(f"\nYou've got {tries} tries.")
+    for counter, i in enumerate(hidden_word):
+        if counter == 0:
+            print(f"\t\t{i}", end=" ")
+        else:
+            print(i, end=" ")
+    print(f"\n\nYou've got {tries} tries left.")
+
+
+def update_hidden_word(character: str, hidden_word: list, word: list) -> list:
+    for counter, char in enumerate(word):
+        if char == character:
+            hidden_word[counter] = char
+    return hidden_word
 
 
 def run() -> None:
-    clear_console()
-    difficulty = choose_difficulty()
-    word = get_word(difficulty, ".\\resources\\words.json")
-    word_as_list = [i for i in word]
-    hidden_word = ["_" for _ in word_as_list]
+    # load global var
+    selected_letters = SelectedLetters.get_instance()
+    # choose a difficulty. Easy, normal or hard
+    while True:
+        difficulty = choose_difficulty()
+        if difficulty is not None:
+            break
+    # get random word from json file by difficulty
+    word = get_word(difficulty)
+    # initialize word as a list, hidden_word, total tries and win condition var
+    word_as_list = [char for char in word]
+    hidden_word = ["_" for i in word_as_list]
     tries = max_number_of_tries
     player_win = False
 
+    # game logic
     print(f"Let's play Hangman!!")
-    while tries > 0:
-        draw_ui(tries-1, hidden_word)
-        chosen_char = choose_char()
+    while tries > 1:
+        # if there are enough tries keep playing
+        draw_ui(tries - 1, hidden_word)
+        # get user input
+        while True:
+            chosen_char = choose_char()
+            if chosen_char is not None:
+                break
+        # is user input one or more of the hidden letters?
         if chosen_char in word_as_list:
-            chosen_chars.append(chosen_char)
-            # update hidden_word
+            # add letter as previously used, so it cannot be entered again
+            selected_letters.add(chosen_char)
+            # update hidden_word with last input
+            hidden_word = update_hidden_word(chosen_char, hidden_word, word_as_list)
             # check if player won
-            player_win = True if hidden_word == word_as_list else False
+            if hidden_word == word_as_list:
+                # player won the game. Break while condition and set player_win to True
+                player_win = True
+                draw_ui(tries - 1, hidden_word)
+                break
         else:
+            # player missed a hidden letter. number of tries decreases by one
+            selected_letters.add(chosen_char)  # add letter as previously used, so it cannot be entered again
             tries -= 1
 
-    adaptive_final_msg = "won" if player_win else "lost"
-    while input(f"You {adaptive_final_msg} ¿Do you want to play again? (Y/N) ").lower() == ("yes" or "y"):
-        run()
+    # if player won game set adaptive_final_msg to "won" else to "lost"
+    if player_win:
+        adaptive_final_msg = "won"
+    else:
+        adaptive_final_msg = "lost"
+        print(f"\nThe word was {word}.")
+
+    while True:
+        continue_game = input(f"\nYou {adaptive_final_msg} ¿Do you want to play again? (Y/N): ").lower()
+        if continue_game == "yes" or continue_game == "y":
+            # game will continue. Reset selected_letters to default and run the game again
+            selected_letters.reset()
+            run()
+        elif continue_game == "no" or continue_game == "n":
+            # user confirmed that they want to stop playing. Close app
+            break
+        else:
+            print("Wrong input. It must be: yes, no, y or n")
     close_app()
 
 
