@@ -7,6 +7,7 @@ import os
 
 chosen_chars = []
 
+
 def clear_console():
     os.system('cls')
 
@@ -16,11 +17,11 @@ def choose_char() -> str:
                      "t", "u", "v", "w", "x", "y", "z")
     user_input = str("Ingresa una de las letras de la palabra oculta: ")
     if user_input in chosen_chars:
-        print("El caracter ingresado ya ha sido utilizado.")
+        print("El carácter ingresado ya ha sido utilizado.")
     elif user_input not in chosen_chars and user_input in possibilities:
         return user_input
     else:
-        print("El caracter ingresado no es permitido.")
+        print("El carácter ingresado no es permitido.")
     choose_char()
 
 
@@ -29,13 +30,13 @@ def choose_difficulty() -> str:
     user_input = str(input("Elige la dificultad:\n1. Fácil\n2. Normal\n3. Difícil\nRespuesta: "))
     if user_input in possibilities.keys():
         return possibilities[user_input]
-    print("Debes ingresar como entreda: 1, 2 o 3. No se aceptan otras entradas.")
+    print("Debes ingresar como entrada: 1, 2 o 3. No se aceptan otras entradas.")
     choose_difficulty()
 
 
 def close_app():
     clear_console()
-    _ = input("Hasta la proxima, gracias por jugar.")
+    _ = input("Hasta la próxima, gracias por jugar.")
     sys.exit()
 
 
